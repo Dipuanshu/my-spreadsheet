@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -150,17 +150,34 @@ export default function Spreadsheet() {
     }
   }, [activeTab]);
 
-  const columns: ColumnDef<DataRow>[] = [
-    { header: "Job Request", accessorKey: "jobRequest", enableSorting: true },
-    { header: "Submitted", accessorKey: "submitted", enableSorting: true },
+  const columns: ColumnDef<DataRow, any>[] = [
     {
+      id: "jobRequest",
+      header: "Job Request",
+      accessorKey: "jobRequest",
+      enableSorting: true,
+    },
+    {
+      id: "submitted",
+      header: "Submitted",
+      accessorKey: "submitted",
+      enableSorting: true,
+    },
+    {
+      id: "status",
       header: "Status",
       accessorKey: "status",
       enableSorting: true,
       cell: (info) => <StatusBadge status={info.getValue() as string} />,
     },
-    { header: "Submitter", accessorKey: "submitter", enableSorting: true },
     {
+      id: "submitter",
+      header: "Submitter",
+      accessorKey: "submitter",
+      enableSorting: true,
+    },
+    {
+      id: "url",
       header: "URL",
       accessorKey: "url",
       enableSorting: true,
@@ -175,20 +192,31 @@ export default function Spreadsheet() {
         </a>
       ),
     },
-    { header: "Assigned", accessorKey: "assigned", enableSorting: true },
     {
+      id: "assigned",
+      header: "Assigned",
+      accessorKey: "assigned",
+      enableSorting: true,
+    },
+    {
+      id: "priority",
       header: "Priority",
       accessorKey: "priority",
       enableSorting: true,
       cell: (info) => <PriorityText priority={info.getValue() as string} />,
     },
     {
+      id: "dueDate",
       header: "Due Date",
       accessorKey: "dueDate",
       enableSorting: true,
-      id: "dueDate",
     },
-    { header: "Est. Value", accessorKey: "estValue", enableSorting: true },
+    {
+      id: "estValue",
+      header: "Est. Value",
+      accessorKey: "estValue",
+      enableSorting: true,
+    },
   ];
 
   const table = useReactTable({
@@ -198,10 +226,7 @@ export default function Spreadsheet() {
       sorting,
       globalFilter,
       columnVisibility: Object.fromEntries(
-        columns.map((col) => [
-          col.id ?? col.accessorKey!,
-          !hiddenColumns.includes(col.id ?? col.accessorKey!),
-        ])
+        columns.map((col) => [col.id!, !hiddenColumns.includes(col.id!)])
       ),
     },
     onSortingChange: setSorting,
